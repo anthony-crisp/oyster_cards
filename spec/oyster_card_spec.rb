@@ -11,6 +11,10 @@ RSpec.describe OysterCard do
     it 'can be topped up by 10' do
       expect { subject.top_up(10) }.to change { subject.balance }.by(10)
     end
+
+    it 'has a maximum balance' do
+      expect { subject.top_up(100) }.to raise_error "Maximum balance is £90."
+    end
   end
 
 end
