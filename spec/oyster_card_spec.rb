@@ -17,4 +17,11 @@ RSpec.describe OysterCard do
     end
   end
 
+  describe '#deduct' do
+    before { subject.top_up(10) }
+    it 'can have money deducted' do
+      expect { subject.deduct(2) }.to change { subject.balance }.by(-2)
+    end
+  end
+
 end

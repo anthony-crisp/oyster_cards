@@ -13,4 +13,8 @@ attr_reader :balance
     @balance += credit
   end
 
+  def deduct(debit)
+    @balance -= debit
+  end
+
 end
