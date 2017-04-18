@@ -24,4 +24,24 @@ RSpec.describe OysterCard do
     end
   end
 
+  describe '#in_journey?' do
+    it 'initialy is not in a journey' do
+      expect(subject).not_to be_in_journey
+    end
+  end
+
+  describe '#touch_in' do
+    it 'starts a journey' do
+      subject.touch_in
+      expect(subject).to be_in_journey
+    end
+  end
+
+  describe '#touch_out' do
+    it 'ends a journey' do
+      subject.touch_out
+      expect(subject).not_to be_in_journey
+    end
+  end
+
 end
