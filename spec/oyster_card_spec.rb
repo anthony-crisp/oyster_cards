@@ -30,12 +30,20 @@ RSpec.describe OysterCard do
     end
   end
 
-  describe '#touch_in' do
-    it 'starts a journey' do
-      subject.touch_in
-      expect(subject).to be_in_journey
+    it 'does not allow touch in if balance is less than minimum balance' do
+      #min = OysterCard::MINIMUM_BALANCE
+      error = "Insuficient funds to start journey."
+      expect { subject.touch_in }.to raise_error error
     end
-  end
+
+    describe '#touch_in' do
+      before { subject.top_up(10) }
+      it 'starts a journey' do
+        subject.touch_in
+        expect(subject).to be_in_journey
+      end
+    end
+    
 
   describe '#touch_out' do
     it 'ends a journey' do
