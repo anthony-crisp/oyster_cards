@@ -1,11 +1,11 @@
+#
 class OysterCard
+  MAXIMUM_BALANCE = 90
+  MINIMUM_BALANCE = 1
+  FARE = 2
 
-MAXIMUM_BALANCE = 90
-MINIMUM_BALANCE = 1
-FARE = 2
-
-attr_reader :balance
-attr_accessor :in_journey
+  attr_reader :balance
+  attr_accessor :in_journey
 
   def initialize
     @balance = 0
@@ -13,7 +13,8 @@ attr_accessor :in_journey
   end
 
   def top_up(credit)
-    fail "Maximum balance is £#{MAXIMUM_BALANCE}." if (@balance + credit) > MAXIMUM_BALANCE
+    message = "Maximum balance is £#{MAXIMUM_BALANCE}."
+    raise message if (@balance + credit) > MAXIMUM_BALANCE
     @balance += credit
   end
 
@@ -21,12 +22,14 @@ attr_accessor :in_journey
     @balance -= fare
   end
 
+  private :deduct
+
   def in_journey?
     @in_journey
   end
 
   def touch_in
-    fail "Insuficient funds to start journey." if @balance < MINIMUM_BALANCE
+    raise 'Insuficient funds to start journey.' if @balance < MINIMUM_BALANCE
     @in_journey = true
   end
 
@@ -34,6 +37,4 @@ attr_accessor :in_journey
     deduct(FARE)
     @in_journey = false
   end
-
-
 end
