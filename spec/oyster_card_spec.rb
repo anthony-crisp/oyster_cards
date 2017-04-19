@@ -1,7 +1,7 @@
 require 'oyster_card'
 
 RSpec.describe OysterCard do
- context 'default' do
+ context 'new default state' do
    it 'has a default balance of 0' do
      expect(subject.balance).to eq (0)
    end
@@ -13,25 +13,25 @@ RSpec.describe OysterCard do
     end
 
     it 'has a maximum balance' do
-      expect { subject.top_up(100) }.to raise_error "Maximum balance is £90."
+      bal = OysterCard::MAXIMUM_BALANCE
+      expect { subject.top_up(100) }.to raise_error "Maximum balance is £#{bal}."
     end
   end
 
-  describe '#deduct' do
-    before { subject.top_up(10) }
-    it 'can have money deducted' do
-      expect { subject.deduct(2) }.to change { subject.balance }.by(-2)
+    describe '#deduct' do
+      before { subject.top_up(10) }
+      it 'can have money deducted' do
+        expect { subject.deduct(2) }.to change { subject.balance }.by(-2)
+      end
     end
-  end
 
-  describe '#in_journey?' do
-    it 'initialy is not in a journey' do
-      expect(subject).not_to be_in_journey
+    describe '#in_journey?' do
+      it 'initialy is not in a journey' do
+        expect(subject).not_to be_in_journey
+      end
     end
-  end
 
     it 'does not allow touch in if balance is less than minimum balance' do
-      #min = OysterCard::MINIMUM_BALANCE
       error = "Insuficient funds to start journey."
       expect { subject.touch_in }.to raise_error error
     end
@@ -43,13 +43,18 @@ RSpec.describe OysterCard do
         expect(subject).to be_in_journey
       end
     end
-    
 
-  describe '#touch_out' do
-    it 'ends a journey' do
-      subject.touch_out
-      expect(subject).not_to be_in_journey
+
+    describe '#touch_out' do
+      before { subject.top_up(10) }
+      it 'ends a journey' do
+        subject.touch_out
+        expect(subject).not_to be_in_journey
+      end
+
+      it 'deducts the correct fare for the journey' do
+        expect { subject.touch_out }.to change { subject.balance }.by(-OysterCard::FARE)
+      end
     end
-  end
 
 end
